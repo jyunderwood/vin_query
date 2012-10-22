@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<VINquery version="1.0.0" report_type="EXTENDED" Date="5/28/2006">
+    <VIN Number="3N1AB6AP3BL654433" Status="FAILED">
+        <Message Key="3" Value="Invalid VIN number: This VIN number did not pass checksum test."/>
+    </VIN>
+</VINquery>

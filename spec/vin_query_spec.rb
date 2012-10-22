@@ -1,0 +1,108 @@
+require 'spec_helper'
+
+describe VinQuery do
+  describe 'when parsing a valid vin' do
+    describe 'when the vin returns multiple trim_levels' do
+      before do
+        @success_multi = File.read("#{File.dirname(__FILE__)}/xml/success_multi.xml")
+        FakeWeb.register_uri(:any, %r{http://www.vinquery\.com/}, body: @success_multi)
+
+        @query_with_multi = VinQuery.new('2G1WT57K291223396',
+                              url: 'http://www.vinquery.com/asdf/asdf.aspx',
+                              access_code: 'asdf1234-asdf1234-asdf1234')
+      end
+
+      subject { @query_with_multi }
+
+      it { should respond_to(:valid?) }
+      it { should respond_to(:parse) }
+      it { should respond_to(:vehicles) }
+      it { should respond_to(:errors) }
+
+      it { should be_valid }
+
+      it '#parse should increase vehicle count' do
+        @query_with_multi.parse
+        @query_with_multi.vehicles.count.should == 4
+      end
+
+      describe 'first vehicle' do
+        before { @query_with_multi.parse }
+        subject { @query_with_multi.vehicles.first }
+
+        it { should be_an_instance_of VinQuery::Vehicle }
+
+        it 'has attributes such as make' do
+          @query_with_multi.vehicles.first.attributes[:make].should eq 'Nissan'
+        end
+
+        it 'has attributes such as model' do
+          @query_with_multi.vehicles.first.attributes[:model].should eq 'Sentra'
+        end
+
+        it 'has attributes such as trim_level' do
+          @query_with_multi.vehicles.first.attributes[:trim_level].should eq '2.0'
+        end
+      end
+
+      describe 'last vehicle' do
+        before { @query_with_multi.parse }
+        subject { @query_with_multi.vehicles.first }
+
+        it { should be_an_instance_of VinQuery::Vehicle }
+
+        it 'has attributes such as trim_level' do
+          @query_with_multi.vehicles.last.attributes[:trim_level].should eq '2.0 SR'
+        end
+      end
+    end
+
+    describe 'when the vin returns a single trim_level' do
+      before do
+        @success_single = File.read("#{File.dirname(__FILE__)}/xml/success_single.xml")
+        FakeWeb.register_uri(:any, %r{http://www.vinquery\.com/}, body: @success_single)
+
+        # Note, using #get to fetch and parse in one command
+        @query_with_single = VinQuery.get('2G1WT57K291223396',
+                              url: 'http://www.vinquery.com/asdf/asdf.aspx',
+                              access_code: 'asdf1234-asdf1234-asdf1234')
+      end
+
+      subject { @query_with_single }
+
+      it { should be_valid }
+
+      it '#parse should increase vehicle count' do
+        @query_with_single.vehicles.count.should == 1
+      end
+    end
+  end
+
+  describe 'when querying an invalid vin' do
+    before do
+      @error_xml = File.read("#{File.dirname(__FILE__)}/xml/error.xml")
+      FakeWeb.register_uri(:any, %r{http://www.vinquery\.com/}, body: @error_xml)
+
+      @query_with_error  = VinQuery.new('2G1WT57K291223396',
+                                        url: 'http://www.vinquery.com/asdf/asdf.aspx',
+                                        access_code: 'asdf1234-asdf1234-asdf1234')
+    end
+
+    subject { @query_with_error }
+
+    it { should_not be_valid }
+
+    describe 'when parsing an invalid vin' do
+      before { @query_with_error.parse }
+
+      it 'should increase errors count' do
+        @query_with_error.errors.count.should == 1
+      end
+
+      it 'should have error message' do
+        message = "Invalid VIN number: This VIN number did not pass checksum test."
+        @query_with_error.errors.first[:message].should == message
+      end
+    end
+  end
+end
