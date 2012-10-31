@@ -28,8 +28,8 @@ class VinQuery
   def valid?
     context = XML::Parser::Context.string(@response)
     doc = XML::Parser.new(context).parse
-    status = doc.find('//VINquery/VIN').first.attributes[:Status]
-    if status == "SUCCESS"
+    vin = doc.find('//VINquery/VIN').first
+    if vin && vin.attributes[:Status] == "SUCCESS"
       true
     else
       false
@@ -68,12 +68,13 @@ class VinQuery
     def create_errors
       context = XML::Parser::Context.string(@response)
       doc = XML::Parser.new(context).parse
-      messages = doc.find('//VINquery/VIN/Message')
-
-      messages.each do |error|
+      error = doc.find('//VINquery/VIN/Message').first
+      if error
         code = error.attributes[:Key]
         message = error.attributes[:Value]
         @errors << { code: code, message: message }
+      else
+        @errors << { code: 500, message: '404 Can not find VinQuery XML' }
       end
     end
 end

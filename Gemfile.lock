@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vin_query (0.0.2)
+    vin_query (0.0.3)
       libxml-ruby (>= 2.3.3)
 
 GEM

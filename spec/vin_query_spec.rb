@@ -100,8 +100,42 @@ describe VinQuery do
       end
 
       it 'should have error message' do
-        message = "Invalid VIN number: This VIN number did not pass checksum test."
+        message = 'Invalid VIN number: This VIN number did not pass checksum test.'
         @query_with_error.errors.first[:message].should == message
+      end
+
+      it 'should have 0 vehicles' do
+        @query_with_error.vehicles.count.should == 0
+      end
+    end
+  end
+
+  describe 'when can not find a page' do
+    before do
+      FakeWeb.register_uri(:any, %r{http://www.vinquery\.com/}, body: '<html>404</html>')
+      @query_with_404 = VinQuery.new('2G1WT57K291223396',
+                                        url: 'http://www.vinquery.com/asdf/asdf.aspx',
+                                        access_code: 'asdf1234-asdf1234-asdf1234')
+    end
+
+    subject { @query_with_404 }
+
+    it { should_not be_valid }
+
+    describe 'when trying to parse a 404' do
+      before { @query_with_404.parse }
+
+      it 'should increase errors count' do
+        @query_with_404.errors.count.should == 1
+      end
+
+      it 'should have error message' do
+        message = '404 Can not find VinQuery XML'
+        @query_with_404.errors.first[:message].should == message
+      end
+
+      it 'should have 0 vehicles' do
+        @query_with_404.vehicles.count.should == 0
       end
     end
   end
