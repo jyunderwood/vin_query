@@ -44,12 +44,23 @@ class VinQuery
         vehicle = {}
 
         v.find('Item').each do |a|
-          key = a.attributes['Key'].downcase.gsub('/', '_').gsub(' ', '_').gsub('-', '_').gsub('.', '').to_sym
+          key = a.attributes['Key'].downcase.
+                                    gsub('/', '_').
+                                    gsub(' ', '_').
+                                    gsub('-', '_').
+                                    gsub('.', '').
+                                    to_sym
+
           if a.attributes['Unit'].length < 1
             vehicle[key] = a.attributes['Value']
           else
             vehicle[key] = "#{a.attributes['Value']} #{a.attributes['Unit']}"
           end
+        end
+
+        ## Additional attributes: Engine Short Code
+        if vehicle[:engine_type]
+          vehicle[:engine_short] = vehicle[:engine_type].upcase.match(/([LVH]\d{1,2})/) ? $1 : nil
         end
 
         @vehicles.push(VinQuery::Vehicle.new(vehicle))
