@@ -2,9 +2,9 @@
 
 A ruby library for fetching and parsing VIN information from vinquery.com, a vehicle identification number decoding service.
 
-## Requirements
+## Ruby requirements
 
-Currently requires 1.9.3. Will test it in 1.8.7 and change necessary syntax in next release.
+Currently requires version 1.9.3.
 
 ## Installation
 
@@ -29,12 +29,14 @@ Pass in the URL and access code provided by vinquery.com as well as the report t
 Note, the VinQuery class has an array of errors and array of vehicles. This is due to the VinQuery service returning a array of possible trim levels for certain vehicles.
 
 ```ruby
-query = VinQuery.get('1C3CC4FB8AN236750', { url: 'vinquery-url-here',
-                     access_code: 'access-code-here',
-                     report_type: 'report-type-here' })
+query = VinQuery.get('1C3CC4FB8AN236750', {
+                      url: 'vinquery-url-here',
+                      access_code: 'access-code-here',
+                      report_type: 'report-type-here' })
 
 query.valid?                           # => true
 
+# Note, vehicles will always be an array. Empty, or otherwise.
 vehicle = query.vehicles.first
 
 vehicle.attributes[:make]              # => Chrysler

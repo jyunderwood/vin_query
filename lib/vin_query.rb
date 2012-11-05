@@ -7,6 +7,7 @@ require 'vin_query/vehicle'
 class VinQuery
   attr_reader :vehicles, :errors
 
+  # Main class method. Use this instead of new()
   def self.get(vin, options={})
     query = VinQuery.new(vin, options)
     query.parse
@@ -25,6 +26,8 @@ class VinQuery
     @response = fetch(vin, url, access_code, report_type)
   end
 
+  # Returns true or false based on the return message from vinquery.com
+  # Will not validate before contacting service.
   def valid?
     context = XML::Parser::Context.string(@response)
     doc = XML::Parser.new(context).parse
@@ -36,6 +39,7 @@ class VinQuery
     end
   end
 
+  # This actually should be a private method.
   def parse
     if valid?
       context = XML::Parser::Context.string(@response)
