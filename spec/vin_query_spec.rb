@@ -43,10 +43,6 @@ describe VinQuery do
         it 'has attributes such as trim_level' do
           @query_with_multi.vehicles.first.attributes[:trim_level].should eq '2.0'
         end
-
-        it 'has attributes engine_short' do
-          @query_with_multi.vehicles.first.attributes[:engine_short].should eq 'L4'
-        end
       end
 
       describe 'last vehicle' do

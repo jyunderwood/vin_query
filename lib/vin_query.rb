@@ -62,11 +62,6 @@ class VinQuery
           end
         end
 
-        ## Additional attributes: Engine Short Code
-        if vehicle[:engine_type]
-          vehicle[:engine_short] = vehicle[:engine_type].upcase.match(/([LVH]\d{1,2})/) ? $1 : nil
-        end
-
         @vehicles.push(VinQuery::Vehicle.new(vehicle))
       end
     else
