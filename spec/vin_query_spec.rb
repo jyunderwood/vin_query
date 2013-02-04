@@ -19,15 +19,26 @@ describe VinQuery do
       it { should respond_to(:vehicles) }
       it { should respond_to(:errors) }
 
-      it { should be_valid }
+      it 'should be valid after parse' do
+        @query_with_multi.fetch
+        @query_with_multi.parse
+
+        @query_with_multi.should be_valid
+      end
 
       it '#parse should increase vehicle count' do
+        @query_with_multi.fetch
         @query_with_multi.parse
+
         @query_with_multi.vehicles.count.should == 4
       end
 
       describe 'first vehicle' do
-        before { @query_with_multi.parse }
+        before do
+          @query_with_multi.fetch
+          @query_with_multi.parse
+        end
+
         subject { @query_with_multi.vehicles.first }
 
         it { should be_an_instance_of VinQuery::Vehicle }
@@ -46,7 +57,11 @@ describe VinQuery do
       end
 
       describe 'last vehicle' do
-        before { @query_with_multi.parse }
+        before do
+          @query_with_multi.fetch
+          @query_with_multi.parse
+        end
+
         subject { @query_with_multi.vehicles.first }
 
         it { should be_an_instance_of VinQuery::Vehicle }
@@ -90,10 +105,18 @@ describe VinQuery do
 
     subject { @query_with_error }
 
-    it { should_not be_valid }
+    it 'should not be valid after parse' do
+      @query_with_error.fetch
+      @query_with_error.parse
+
+      @query_with_error.should_not be_valid
+    end
 
     describe 'when parsing an invalid vin' do
-      before { @query_with_error.parse }
+      before do
+        @query_with_error.fetch
+        @query_with_error.parse
+      end
 
       it 'should increase errors count' do
         @query_with_error.errors.count.should == 1
@@ -120,10 +143,18 @@ describe VinQuery do
 
     subject { @query_with_404 }
 
-    it { should_not be_valid }
+    it 'should not be valid after parse' do
+      @query_with_404.fetch
+      @query_with_404.parse
+
+      @query_with_404.should_not be_valid
+    end
 
     describe 'when trying to parse a 404' do
-      before { @query_with_404.parse }
+      before do
+        @query_with_404.fetch
+        @query_with_404.parse
+      end
 
       it 'should increase errors count' do
         @query_with_404.errors.count.should == 1

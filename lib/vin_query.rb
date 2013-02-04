@@ -10,6 +10,7 @@ class VinQuery
   # Main class method. Use this instead of new()
   def self.get(vin, options={})
     query = VinQuery.new(vin, options)
+    query.fetch
     query.parse
 
     return query
@@ -22,8 +23,7 @@ class VinQuery
 
     @vehicles = []
     @errors   = []
-
-    @response = fetch(vin, url, access_code, report_type)
+    @url      = "#{url}?accessCode=#{access_code}&vin=#{vin}&reportType=#{report_type}"
   end
 
   # Returns true or false based on the return message from vinquery.com
@@ -39,7 +39,6 @@ class VinQuery
     end
   end
 
-  # This actually should be a private method.
   def parse
     if valid?
       context = XML::Parser::Context.string(@response)
@@ -69,22 +68,20 @@ class VinQuery
     end
   end
 
-  private
+  def fetch
+    @response = Net::HTTP.get(URI.parse(@url))
+  end
 
-    def fetch(vin, url, access_code, report_type)
-      Net::HTTP.get(URI.parse("#{url}?accessCode=#{access_code}&vin=#{vin}&reportType=#{report_type}"))
+  def create_errors
+    context = XML::Parser::Context.string(@response)
+    doc = XML::Parser.new(context).parse
+    error = doc.find('//VINquery/VIN/Message').first
+    if error
+      code = error.attributes[:Key]
+      message = error.attributes[:Value]
+      @errors << { code: code, message: message }
+    else
+      @errors << { code: 500, message: '404 Can not find VinQuery XML' }
     end
-
-    def create_errors
-      context = XML::Parser::Context.string(@response)
-      doc = XML::Parser.new(context).parse
-      error = doc.find('//VINquery/VIN/Message').first
-      if error
-        code = error.attributes[:Key]
-        message = error.attributes[:Value]
-        @errors << { code: code, message: message }
-      else
-        @errors << { code: 500, message: '404 Can not find VinQuery XML' }
-      end
-    end
+  end
 end
