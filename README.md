@@ -2,10 +2,6 @@
 
 A ruby library for fetching and parsing VIN information from vinquery.com, a vehicle identification number decoding service.
 
-## Ruby requirements
-
-Currently requires version 1.9.3.
-
 ## Installation
 
 Add this line to your application's Gemfile:
