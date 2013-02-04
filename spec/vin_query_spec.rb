@@ -4,7 +4,7 @@ describe VinQuery do
   describe 'when parsing a valid vin' do
     describe 'when the vin returns multiple trim_levels' do
       before do
-        @success_multi = File.read("#{File.dirname(__FILE__)}/xml/success_multi.xml")
+        @success_multi = File.read("#{File.dirname(__FILE__)}/fixtures/success_multi.xml")
         FakeWeb.register_uri(:any, %r{http://www.vinquery\.com/}, body: @success_multi)
 
         @query_with_multi = VinQuery.new('2G1WT57K291223396',
@@ -59,7 +59,7 @@ describe VinQuery do
 
     describe 'when the vin returns a single trim_level' do
       before do
-        @success_single = File.read("#{File.dirname(__FILE__)}/xml/success_single.xml")
+        @success_single = File.read("#{File.dirname(__FILE__)}/fixtures/success_single.xml")
         FakeWeb.register_uri(:any, %r{http://www.vinquery\.com/}, body: @success_single)
 
         # Note, using #get to fetch and parse in one command
@@ -80,7 +80,7 @@ describe VinQuery do
 
   describe 'when querying an invalid vin' do
     before do
-      @error_xml = File.read("#{File.dirname(__FILE__)}/xml/error.xml")
+      @error_xml = File.read("#{File.dirname(__FILE__)}/fixtures/error.xml")
       FakeWeb.register_uri(:any, %r{http://www.vinquery\.com/}, body: @error_xml)
 
       @query_with_error  = VinQuery.new('2G1WT57K291223396',
