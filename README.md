@@ -1,5 +1,7 @@
 # VinQuery
 
+![travis-ci - vin_query](https://api.travis-ci.org/jyunderwood/vin_query.png)
+
 A ruby library for fetching and parsing VIN information from vinquery.com, a vehicle identification number decoding service.
 
 ## Installation
@@ -20,9 +22,9 @@ Or install it yourself as:
 
 ## Usage
 
-Pass in the URL and access code provided by vinquery.com as well as the report type you want.
+Pass in the URL and access code provided by vinquery.com as well as the report type you want (defaults to report type '2' -- the extended report type).
 
-Note, the VinQuery class has an array of errors and array of vehicles. This is due to the VinQuery service returning a array of possible trim levels for certain vehicles.
+Note, A VinQuery::Query class has an array of trim levels. This is due to the VinQuery service returning a array of possible trim levels for certain makes/models.
 
 ```ruby
 query = VinQuery.get('1C3CC4FB8AN236750', {
@@ -32,8 +34,8 @@ query = VinQuery.get('1C3CC4FB8AN236750', {
 
 query.valid?                           # => true
 
-# Note, vehicles will always be an array. Empty, or otherwise.
-vehicle = query.vehicles.first
+# Note, trim_levels will always be an array. Empty, or otherwise.
+vehicle = query.trim_levels.first
 
 vehicle.attributes[:make]              # => Chrysler
 vehicle.attributes[:model]             # => Sebring
