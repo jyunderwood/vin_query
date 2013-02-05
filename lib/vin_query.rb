@@ -9,6 +9,9 @@ module VinQuery
   extend self
 
   def get(vin, options={})
-    VinQuery::Query.new(vin, options).get
+    query = VinQuery::Query.new(vin, options)
+    query.get()
+
+    return query
   end
 end
