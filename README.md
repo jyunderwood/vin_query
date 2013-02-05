@@ -26,9 +26,9 @@ Note, the VinQuery class has an array of errors and array of vehicles. This is d
 
 ```ruby
 query = VinQuery.get('1C3CC4FB8AN236750', {
-                      url: 'vinquery-url-here',
-                      access_code: 'access-code-here',
-                      report_type: 'report-type-here' })
+                     :url => 'vinquery-url-here',
+                     :access_code => 'access-code-here',
+                     :report_type => 'report-type-here' })
 
 query.valid?                           # => true
 

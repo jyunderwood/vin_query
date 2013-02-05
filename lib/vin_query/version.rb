@@ -1,3 +1,5 @@
-class VinQuery
-  VERSION = '0.5.0'
+# -*- encoding: utf-8 -*-
+
+module VinQuery
+  VERSION = '1.0.0'
 end
