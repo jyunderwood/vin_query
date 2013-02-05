@@ -4,6 +4,8 @@
 
 A ruby library for fetching and parsing VIN information from vinquery.com, a vehicle identification number decoding service.
 
+Note, this gem is not officially affiliated with vinquery.com.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -42,6 +44,12 @@ vehicle.attributes[:model]             # => Sebring
 vehicle.attributes[:trim_level]        # => Sedan Touring
 vehicle.attributes[:fuel_economy_city] # => 21
 ```
+
+## Resources
+
+- [vinquery.com FAQ](http://www.vinquery.com/faq.aspx)
+- [VinQuery RubyGems page](https://rubygems.org/gems/vin_query)
+- [VinQuery Travis CI page](https://travis-ci.org/jyunderwood/vin_query)
 
 ## Contributing
 
