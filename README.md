@@ -1,6 +1,6 @@
 # VinQuery
 
-![travis-ci - vin_query](https://api.travis-ci.org/jyunderwood/vin_query.png)
+[![Build Status](https://travis-ci.org/jyunderwood/vin_query.png?branch=master)](https://travis-ci.org/jyunderwood/vin_query)
 
 A ruby library for fetching and parsing VIN information from vinquery.com, a vehicle identification number decoding service.
 
