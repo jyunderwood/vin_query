@@ -13,7 +13,6 @@ Gem::Specification.new do |gem|
   gem.authors       = ['Jonathan Underwood']
   gem.email         = ['jonathan@jyunderwood.com']
 
-  gem.date          = Date.today.to_s
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
