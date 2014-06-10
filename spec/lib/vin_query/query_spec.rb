@@ -39,7 +39,7 @@ describe VinQuery::Query do
 
   describe '#parse' do
     context 'when a single trim level is returned' do
-      before(:each) { client.parse xml_single }
+      before { client.parse xml_single }
 
       it 'populates an array of trim levels with 1 trim level' do
         expect(client.trim_levels.size).to be 1
@@ -63,7 +63,7 @@ describe VinQuery::Query do
     end
 
     context 'when multiple trim levels are returned' do
-      before(:each) { client.parse xml_multi }
+      before { client.parse xml_multi }
 
       it 'populates an array of trim levels with the number of trim levels' do
         expect(client.trim_levels.size).to be 4
@@ -95,8 +95,8 @@ describe VinQuery::Query do
 
   describe '#get' do
     context 'success response' do
-      before(:each) do
-        client.stub(:fetch).and_return xml_multi
+      before do
+        allow(client).to receive(:fetch).and_return(xml_multi)
         client.get
       end
 
@@ -110,8 +110,8 @@ describe VinQuery::Query do
     end
 
     context 'error response' do
-      before(:each) do
-        client.stub(:fetch).and_return xml_error
+      before do
+        allow(client).to receive(:fetch).and_return(xml_error)
         client.get
       end
 
@@ -125,7 +125,7 @@ describe VinQuery::Query do
     end
 
     context '404 response' do
-      before(:each) { client.stub(:fetch).and_return '<html>404</html>' }
+      before { allow(client).to receive(:fetch).and_return('<html>404</html>') }
 
       it 'fetches xml and response cannot be validated' do
         expect{ client.get }.to raise_error VinQuery::ValidationError
