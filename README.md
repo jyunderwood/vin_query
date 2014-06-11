@@ -26,7 +26,7 @@ Or install it yourself as:
 
 Pass in the URL and access code provided by vinquery.com as well as the report type you want (defaults to report type '2' -- the extended report type).
 
-Note, A VinQuery::Query class has an array of trim levels. This is due to the VinQuery service returning a array of possible trim levels for certain makes/models.
+Note, A `VinQuery::Query` class has an array of trim levels. This is due to the VinQuery service returning a array of possible trim levels for certain makes/models.
 
 ```ruby
 query = VinQuery.get('1C3CC4FB8AN236750',
@@ -37,7 +37,7 @@ query = VinQuery.get('1C3CC4FB8AN236750',
 query.valid? # => true
 ```
 
-## Configuration
+### Configuration
 
 It also accepts a configuration block to streamline gets.
 
@@ -52,7 +52,9 @@ query = VinQuery.get('1C3CC4FB8AN236750')
 query.valid? # => true
 ```
 
-# Note, trim_levels will always be an array. Empty, or otherwise.
+_Note, `trim_levels` will always be an array. Empty, or otherwise._
+
+```
 vehicle = query.trim_levels.first
 
 vehicle.attributes[:make]              # => Chrysler
