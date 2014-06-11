@@ -1,5 +1,3 @@
-# -*- encoding: utf-8 -*-
-
 module VinQuery
   class Error < StandardError
   end

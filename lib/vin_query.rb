@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 require 'vin_query/version'
 
 require 'vin_query/exceptions'
