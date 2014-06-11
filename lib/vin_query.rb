@@ -1,5 +1,6 @@
 require 'vin_query/version'
 
+require 'vin_query/configuration'
 require 'vin_query/exceptions'
 require 'vin_query/trim_level'
 require 'vin_query/query'

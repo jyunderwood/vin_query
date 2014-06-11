@@ -3,15 +3,13 @@ require 'nokogiri'
 
 module VinQuery
   class Query
-    attr_reader :url, :trim_levels
+    attr_reader :vin, :url, :trim_levels
 
     def initialize(vin, options={})
-      url = options[:url]
-      access_code = options[:access_code]
-      report_type = 2 || options[:report_type]
-
+      VinQuery.configuration.merge_options(options)
+      @vin = vin
       @trim_levels = []
-      @url = "#{url}?accessCode=#{access_code}&vin=#{vin}&reportType=#{report_type}"
+      build_url
     end
 
     def valid?
@@ -19,15 +17,11 @@ module VinQuery
     end
 
     def validate(xml)
-      doc = Nokogiri::XML xml
+      doc = Nokogiri::XML(xml)
+      raise ValidationError if doc.xpath('//VINquery/VIN').size == 0
 
-      if doc.xpath('//VINquery/VIN').size == 0
-        raise ValidationError
-      end
-
-      vin = doc.xpath('//VINquery/VIN').first
-
-      if vin.attributes['Status'].to_s == 'SUCCESS'
+      results_vin = doc.xpath('//VINquery/VIN').first
+      if results_vin.attributes['Status'].to_s == 'SUCCESS'
         @valid = true
       else
         @valid = false
@@ -35,13 +29,10 @@ module VinQuery
     end
 
     def parse(xml)
-      doc = Nokogiri::XML xml
-      vin = doc.xpath('//VINquery/VIN').first
+      doc = Nokogiri::XML(xml)
+      raise ParseError if doc.xpath('//VINquery/VIN/Vehicle').size == 0
 
-      if doc.xpath('//VINquery/VIN/Vehicle').size == 0
-        raise ParseError
-      end
-
+      results_vin = doc.xpath('//VINquery/VIN').first
       doc.xpath('//VINquery/VIN/Vehicle').each do |v|
         vehicle = {}
 
@@ -61,19 +52,24 @@ module VinQuery
           end
         end
 
-        @trim_levels.push(VinQuery::TrimLevel.new(vin.attributes['Number'].to_s, vehicle))
+        @trim_levels.push(VinQuery::TrimLevel.new(results_vin.attributes['Number'].to_s, vehicle))
       end
     end
 
     def get
-      xml = fetch @url
-
-      if validate xml
-        parse xml
-      end
+      xml = fetch(@url)
+      parse(xml) if validate(xml)
     end
 
     private
+
+      def build_url
+        url = VinQuery.configuration.url
+        access_code = VinQuery.configuration.access_code
+        report_type = VinQuery.configuration.report_type
+
+        @url = "#{url}?accessCode=#{access_code}&vin=#{vin}&reportType=#{report_type}"
+      end
 
       def fetch(url)
         Net::HTTP.get(URI.parse(url))

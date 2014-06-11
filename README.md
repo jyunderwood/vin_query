@@ -29,12 +29,27 @@ Pass in the URL and access code provided by vinquery.com as well as the report t
 Note, A VinQuery::Query class has an array of trim levels. This is due to the VinQuery service returning a array of possible trim levels for certain makes/models.
 
 ```ruby
-query = VinQuery.get('1C3CC4FB8AN236750', {
-                     :url => 'vinquery-url-here',
-                     :access_code => 'access-code-here',
-                     :report_type => 'report-type-here' })
+query = VinQuery.get('1C3CC4FB8AN236750',
+                     url: 'vinquery-url-here',
+                     access_code: 'access-code-here',
+                     report_type: 'report-type-here')
 
-query.valid?                           # => true
+query.valid? # => true
+
+## Configuration
+
+It also accepts a configuration block to streamline gets.
+
+```ruby
+VinQuery.configure do |config|
+  config.url = 'vinquery-url-here'
+  config.access_code = 'access-code-here'
+  config.report_type = 2
+end
+
+query = VinQuery.get('1C3CC4FB8AN236750')
+query.valid? # => true
+```
 
 # Note, trim_levels will always be an array. Empty, or otherwise.
 vehicle = query.trim_levels.first
