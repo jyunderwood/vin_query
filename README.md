@@ -35,6 +35,7 @@ query = VinQuery.get('1C3CC4FB8AN236750',
                      report_type: 'report-type-here')
 
 query.valid? # => true
+```
 
 ## Configuration
 
