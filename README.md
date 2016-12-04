@@ -45,7 +45,7 @@ It also accepts a configuration block to streamline gets.
 VinQuery.configure do |config|
   config.url = 'vinquery-url-here'
   config.access_code = 'access-code-here'
-  config.report_type = 2
+  config.report_type = VinQuery::ReportType::EXTENDED
 end
 
 query = VinQuery.get('1C3CC4FB8AN236750')

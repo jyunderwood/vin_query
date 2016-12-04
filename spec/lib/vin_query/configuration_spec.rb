@@ -14,13 +14,13 @@ describe VinQuery::Configuration do
   end
 
   it 'has a default report type' do
-    expect(VinQuery.configuration.report_type).to eq 2
+    expect(VinQuery.configuration.report_type).to eq VinQuery::ReportType::EXTENDED
   end
 
   context 'when manually given options' do
     it 'overrides default configuration settings' do
-      VinQuery.configuration.merge_options(report_type: 3)
-      expect(VinQuery.configuration.report_type).to eq 3
+      VinQuery.configuration.merge_options(report_type: VinQuery::ReportType::LITE)
+      expect(VinQuery.configuration.report_type).to eq VinQuery::ReportType::LITE
     end
 
     it 'overrides previously set configuration settings' do
