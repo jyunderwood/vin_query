@@ -1,3 +1,8 @@
+## v1.2.0 (2016-12-12)
+
+- Expose response XML, and add ReportType constants
+- Add license and required ruby version to gemspec
+
 ## v1.1.0 (2016-12-12)
 
 - Add configuration block pattern
