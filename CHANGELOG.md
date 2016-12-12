@@ -1,3 +1,8 @@
+## v1.1.0 (2016-12-12)
+
+- Add configuration block pattern
+- Dropped testing support for rbx, jruby and MRI 1.9
+
 ## v1.0.2 (2013-03-15)
 
 - Tested against Ruby 2.0
