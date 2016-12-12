@@ -1,10 +1,20 @@
 module VinQuery
+  module ReportType
+    BASIC = 0
+    STANDARD = 1
+    EXTENDED = 2
+    LITE = 3
+  end
+
   class << self
     attr_accessor :configuration
+
+    def configuration
+      @configuration ||= Configuration.new
+    end
   end
 
   def self.configure
-    self.configuration ||= Configuration.new
     yield(configuration)
   end
 
@@ -16,7 +26,7 @@ module VinQuery
     attr_accessor :url, :access_code, :report_type
 
     def initialize
-      @report_type = 2
+      @report_type = ReportType::EXTENDED
     end
 
     def merge_options(options={})

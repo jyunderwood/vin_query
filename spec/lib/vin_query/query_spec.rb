@@ -100,6 +100,7 @@ describe VinQuery::Query do
       end
 
       it 'fetches xml and response is valid' do
+        expect(client.response_xml).to eq xml_multi
         expect(client.valid?).to be true
       end
 
@@ -115,6 +116,7 @@ describe VinQuery::Query do
       end
 
       it 'fetches xml and response is not valid' do
+        expect(client.response_xml).to eq xml_error
         expect(client.valid?).to be false
       end
 
@@ -124,10 +126,13 @@ describe VinQuery::Query do
     end
 
     context '404 response' do
-      before { allow(client).to receive(:fetch).and_return('<html>404</html>') }
+      let(:response_404) { '<html>404</html>' }
+
+      before { allow(client).to receive(:fetch).and_return(response_404) }
 
       it 'fetches xml and response cannot be validated' do
         expect{ client.get }.to raise_error VinQuery::ValidationError
+        expect(client.response_xml).to eq response_404
       end
     end
   end

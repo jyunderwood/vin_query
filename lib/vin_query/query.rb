@@ -3,7 +3,7 @@ require 'nokogiri'
 
 module VinQuery
   class Query
-    attr_reader :vin, :url, :trim_levels
+    attr_reader :vin, :url, :response_xml, :trim_levels
 
     def initialize(vin, options={})
       VinQuery.configuration.merge_options(options)
@@ -57,8 +57,8 @@ module VinQuery
     end
 
     def get
-      xml = fetch(@url)
-      parse(xml) if validate(xml)
+      @response_xml = fetch(@url)
+      parse(@response_xml) if validate(@response_xml)
     end
 
     private
